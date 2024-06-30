@@ -40,3 +40,16 @@ Ex: git add . (All changed files will be moved to Staging area)
 - To checkout, we use git checkout command. We can go to different versions of our commits using this. Here the files are copied into the Working directory via Staging area.
 
 git status - To check the status 
+
+When changes are committed, git automatically adds info about Author name and email, description which is stored in commit object
+
+Every commit points to parent and each commit may have more than 1 parent
+
+Configuring Git Author and Email -
+- git config --global user.name name
+- git config --global user.email email
+
+- git config --list (To check what is the git configuration)
+
+q <Enter> - To exit
+
