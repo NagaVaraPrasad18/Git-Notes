@@ -1,0 +1,42 @@
+mkdir name - create directory
+cd name - To move into the directory
+dir - To get list of files
+dir /a - To get list of hidden files
+
+git init - To create Git Respository
+git branch -m name - To rename a branch
+git branch - To get list of branches
+
+git-repository is the Working directory and .git is the Git Repository
+
+There are 4 Object types in Git -
+1. Blob - Files
+2. Tree - Folders/Directories
+3. Commit - Pointers to Trees
+	We can make many commits. Each commit is a snapshot of the project
+4. Annotated Tag
+
+Hash -
+Every object type has a specific hash (HexaDecimal). It is a unique identifier to every object in git. It is created using Hash Function (SHA1). A fixed length Hash will be generated from any variable length input.
+SHA1 - 160bits (40 hexaDecimal characters)
+
+echo First > First.txt :
+echo Content File_Name.txt - To create a file with Content
+
+cat First.txt:
+cat File_Name.txt - To read contents of the file
+
+In git, there are 3 areas where files are located - Working Dir, Staging area and Git repo
+
+1. Working Dir - This is where our files/folders are present
+
+2. Git repo - In this by default there are few folders present - info, pack (dir .git/objects)
+
+3. Staging area - Intermediate area between Working dir and Git repo. First files are moved into Staging area before movig into Git repo. Before files are copied into Working dir from Git repo, it is first moved into Staging area.
+
+- To move files from Working dir to Staging area, we use the command: git add
+Ex: git add . (All changed files will be moved to Staging area)
+- Next, git commit command is used to move files from Staging area to Git repo, these files created in .git/objects folder.
+- To checkout, we use git checkout command. We can go to different versions of our commits using this. Here the files are copied into the Working directory via Staging area.
+
+git status - To check the status 
