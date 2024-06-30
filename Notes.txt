@@ -53,3 +53,6 @@ Configuring Git Author and Email -
 
 q <Enter> - To exit
 
+To commit changes - 
+- git commit -m "Message / Description"
+For every commit, message should be included
