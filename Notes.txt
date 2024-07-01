@@ -56,3 +56,12 @@ q <Enter> - To exit
 To commit changes - 
 - git commit -m "Message / Description"
 For every commit, message should be included
+
+- git log (To check the history of commits)
+
+HEAD is a dynamic pointer and it represents the current location
+
+git automatically moves the current branch pointer to the last commit
+
+HEAD points to branch (main) and  branch points to the last commit
+
