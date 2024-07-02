@@ -37,6 +37,7 @@ In git, there are 3 areas where files are located - Working Dir, Staging area an
 - To move files from Working dir to Staging area, we use the command: git add
 Ex: git add . (All changed files will be moved to Staging area)
 - Next, git commit command is used to move files from Staging area to Git repo, these files created in .git/objects folder.
+- git commit creates a commit object which has info like Author name, email, date, message, etc.
 - To checkout, we use git checkout command. We can go to different versions of our commits using this. Here the files are copied into the Working directory via Staging area.
 
 git status - To check the status 
@@ -64,4 +65,14 @@ HEAD is a dynamic pointer and it represents the current location
 git automatically moves the current branch pointer to the last commit
 
 HEAD points to branch (main) and  branch points to the last commit
+
+Checkout -
+- git checkout sha
+Ex: git checkout 89ad57383a3faad69cc3d19d0a3c24e7ae830fc6
+
+When we checkout, the HEAD will point to this commit. Here the head is in Detached HEAD state which is HEAD pointing to a commit instead of the branch. When we checkout, the state of the repository is changed
+
+To checkout to a specific branch -
+- git checkout branch
+Ex: git checkout main
 
