@@ -32,7 +32,7 @@ In git, there are 3 areas where files are located - Working Dir, Staging area an
 
 2. Git repo - In this by default there are few folders present - info, pack (dir .git/objects)
 
-3. Staging area - Intermediate area between Working dir and Git repo. First files are moved into Staging area before movig into Git repo. Before files are copied into Working dir from Git repo, it is first moved into Staging area.
+3. Staging area - Intermediate area between Working dir and Git repo. First files are moved into Staging area before moving into Git repo. Before files are copied into Working dir from Git repo, it is first moved into Staging area.
 
 - To move files from Working dir to Staging area, we use the command: git add
 Ex: git add . (All changed files will be moved to Staging area)
