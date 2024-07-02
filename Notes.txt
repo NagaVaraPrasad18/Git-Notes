@@ -75,4 +75,3 @@ When we checkout, the HEAD will point to this commit. Here the head is in Detach
 To checkout to a specific branch -
 - git checkout branch
 Ex: git checkout main
-
