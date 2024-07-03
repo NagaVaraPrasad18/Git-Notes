@@ -101,3 +101,4 @@ Merging:
 - Checkout main branch (receiving branch)
 - Merge feature branch to the receiving branch (main)
 	git merge feature-branch
+After this merge command, a text editor will popup, edit message text there
