@@ -23,6 +23,8 @@ SHA1 - 160bits (40 hexaDecimal characters)
 echo First > First.txt :
 echo Content File_Name.txt - To create a file with Content
 
+echo "Next Line" >> First.txt - To add the given text in the next line.
+
 cat First.txt:
 cat File_Name.txt - To read contents of the file
 
@@ -58,6 +60,10 @@ To commit changes -
 - git commit -m "Message / Description"
 For every commit, message should be included
 
+To move changed files into staging area and commit simultaneously -
+- git commit -a-m "Add and Commit"
+Here, -a stands for adding all modified files to staging area.
+
 - git log (To check the history of commits)
 
 HEAD is a dynamic pointer and it represents the current location
@@ -77,4 +83,7 @@ To checkout to a specific branch -
 Ex: git checkout main
 
 File Tracking Statuses -
-1. Untracked -
+1. Untracked - The files which are changed but not moved to staging area
+2. Unmodifies - The files which are committed and not edited.
+3. Modified - The files which are changed after committing.
+4. Staged - 
