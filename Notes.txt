@@ -4,6 +4,7 @@ dir - To get list of files
 dir /a - To get list of hidden files
 
 git init - To create Git Respository
+git branch name - To create a new branch
 git branch -m name - To rename a branch
 git branch - To get list of branches
 
@@ -65,6 +66,7 @@ To move changed files into staging area and commit simultaneously -
 Here, -a stands for adding all modified files to staging area.
 
 - git log (To check the history of commits)
+- git log --graph (To check the history of commits with a graph visualising commits and its parents. It is graphical representation of commits tree.
 
 HEAD is a dynamic pointer and it represents the current location
 
@@ -87,3 +89,22 @@ File Tracking Statuses -
 2. Unmodifies - The files which are committed and not edited.
 3. Modified - The files which are changed after committing.
 4. Staged - 
+
+Branches and Merging:
+- First commit is Root commit
+- There will be more than 1 branches in git repositories. These are feature branches, typically used to test a feature.
+- These feature branches are created from main branches at a point in time.
+- Every feature branch may be created at different point in time (different commits). Eventually these feature branches should be merged with the "main" branch.
+
+Merging:
+- Create a new feature branch from main branch
+- Make changes in the feature branch and commmit
+- Checkout main branch (receiving branch)
+- Merge feature branch to the receiving branch (main)
+	git merge feature-branch
+After this merge command, a text editor will popup, edit message text there
+
+To Delete a branch:
+- git branch -d name
+Ex: git branch -d feature1
+

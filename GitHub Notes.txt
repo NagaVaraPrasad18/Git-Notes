@@ -1,0 +1,27 @@
+GitHub is a remote repository hosting service.
+It looks exactly like Local Repository. It has Working Directory, Staging Area and Git repository
+
+When we connect local repo to remote repo we create new remote in local repository.
+Every remote has a name, by default it is origin
+
+These commands are used when setting up a new repository on GitHub and pushing your local repository to it.
+
+git remote add origin https://github.com/NagaVaraPrasad18/Git-Notes.git
+
+git remote add origin: This command adds a remote named "origin" to your local Git repository.
+https://github.com/NagaVaraPrasad18/Git-Notes.git: This is the URL of the remote repository on GitHub where you want to push your local repository. "origin" is just a conventionally used name for the remote repository, but you could choose a different name if you prefer.
+So, this command links your local repository to the remote repository on GitHub at the specified URL.
+
+git branch -M main
+
+git branch -M: This command renames the current branch to the specified name.
+main: This is the new name you are giving to your main branch. This is often done because GitHub has transitioned from using master as the default branch name to main. If your local repository was using master as the main branch name, you use this command to rename it to main.
+So, this command ensures that your local repository's main branch is named main to align with GitHub's current conventions.
+
+git push -u origin main
+
+git push: This command is used to push your changes from the local repository to the remote repository.
+-u origin main: This option sets the upstream branch for the current local branch (main). "Upstream" means the branch on the remote repository that your local branch should track (pull and push changes to/from).
+origin: This is the name of the remote repository you are pushing to (which you previously set with git remote add origin).
+main: This is the branch on the remote repository you are pushing your local changes to.
+So, this command pushes your local main branch to the main branch on the remote repository (origin) and sets it as the upstream branch, so that in the future, you can simply use git push and git pull without specifying the branch and remote.
