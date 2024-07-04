@@ -1,0 +1,5 @@
+GitHub is a remote repository hosting service.
+It looks exactly like Local Repository. It has Working Directory, Staging Area and Git repository
+
+When we connect local repo to remote repo we create new remote in local repository.
+Every remote has a name, by default it is origin

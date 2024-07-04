@@ -66,6 +66,7 @@ To move changed files into staging area and commit simultaneously -
 Here, -a stands for adding all modified files to staging area.
 
 - git log (To check the history of commits)
+- git log --graph (To check the history of commits with a graph visualising commits and its parents. It is graphical representation of commits tree.
 
 HEAD is a dynamic pointer and it represents the current location
 
@@ -102,3 +103,8 @@ Merging:
 - Merge feature branch to the receiving branch (main)
 	git merge feature-branch
 After this merge command, a text editor will popup, edit message text there
+
+To Delete a branch:
+- git branch -d name
+Ex: git branch -d feature1
+
