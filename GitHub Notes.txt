@@ -1,6 +1,8 @@
 GitHub is a remote repository hosting service.
 It looks exactly like Local Repository. It has Working Directory, Staging Area and Git repository
 
+GitHub repository is a folder where we track file changes and store different versions of the folder.
+
 When we connect local repo to remote repo we create new remote in local repository.
 Every remote has a name, by default it is origin
 
@@ -25,3 +27,18 @@ git push: This command is used to push your changes from the local repository to
 origin: This is the name of the remote repository you are pushing to (which you previously set with git remote add origin).
 main: This is the branch on the remote repository you are pushing your local changes to.
 So, this command pushes your local main branch to the main branch on the remote repository (origin) and sets it as the upstream branch, so that in the future, you can simply use git push and git pull without specifying the branch and remote.
+
+- git push
+This command is used to push all the committed changes to the remote git repository
+
+-git pull
+This command is used to pull all the changes from the remote git repository
+
+- git clone link
+This command is used to clone the git repository into the local machine
+
+- git clone link name
+Clone the repo with the specified name.
+
+- git remote -v
+This command displays the link to the remote repository.
