@@ -34,14 +34,31 @@ In git, there are 3 areas where files are located - Working Dir, Staging area an
 1. Working Dir - This is where our files/folders are present
 
 2. Git repo - In this by default there are few folders present - info, pack (dir .git/objects)
+    - In objects folder, after commiting and merging folders will be created.
+Ex: 9b
+- In this folder hash will be stored
+- dir .git/objects/9b will return file with hash name (incomplete)
+- If we combine folder name (9b) and file name (4b0276f15c84b3e9a3563945d029badf961cf9), then we get sha1 hash. 
+- To check what type of file this is we use the command - git cat-file -t 9b4b0276f15c84b3e9a3563945d029badf961cf9. Then we get - tree.
+- git cat-file -p hash (To read the contents of the git object)
 
 3. Staging area - Intermediate area between Working dir and Git repo. First files are moved into Staging area before moving into Git repo. Before files are copied into Working dir from Git repo, it is first moved into Staging area.
 
 - To move files from Working dir to Staging area, we use the command: git add
-Ex: git add . (All changed files will be moved to Staging area)
+Ex: git add .
+- git add command marks files to be committed.
+
+To stage single file - git add File.txt
+To stage multiple files - git add File1.txt File2.txt
+To stage all modified files - git add .
+
 - Next, git commit command is used to move files from Staging area to Git repo, these files created in .git/objects folder.
+- Commit means implying there is a new version of the file or folders.
 - git commit creates a commit object which has info like Author name, email, date, message, etc.
 - To checkout, we use git checkout command. We can go to different versions of our commits using this. Here the files are copied into the Working directory via Staging area.
+
+To remove one or more files from staging area - git reset file.txt
+Ex: git reset First.txt
 
 git status - To check the status 
 
@@ -56,6 +73,9 @@ Configuring Git Author and Email -
 - git config --list (To check what is the git configuration)
 
 q <Enter> - To exit
+
+Commit - Set of saved repository changes
+	Has hash key
 
 To commit changes - 
 - git commit -m "Message / Description"
@@ -108,3 +128,21 @@ To Delete a branch:
 - git branch -d name
 Ex: git branch -d feature1
 
+Reading contents of the HEAD folder -
+cat .git/HEAD (HEAD points to a specific branch)
+All branches are present in the refs folder in .git
+All versions of the files are stored in objects folder
+
+- git name -h
+This command shows all the available commands related to the name.
+
+- git show hash
+Ex: git show 5645013dab377ae5e2416b9a647a66ac3474673e
+This command shows info regarding a particular commit. Here, all the changes that took place in the commit is displayed including name changes and new file creation.
+
+- git show --name-only hash
+Ex: git show --name-only 5645013dab377ae5e2416b9a647a66ac3474673e
+This command will show only the file names.
+
+- git reflog
+This command shows all the info about the changes in the project including all the commits on all the branches.
