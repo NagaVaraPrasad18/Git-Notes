@@ -146,7 +146,3 @@ This command will show only the file names.
 
 - git reflog
 This command shows all the info about the changes in the project including all the commits on all the branches.
-
-Undo and Redo:
-There are 2 ways to undo changes -
-1. revert: Creates a new commit which undoes the changes of a certain commit
