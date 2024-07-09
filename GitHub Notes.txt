@@ -31,6 +31,9 @@ So, this command pushes your local main branch to the main branch on the remote 
 - git push
 This command is used to push all the committed changes to the remote git repository
 
+- git push -f
+This command is used to forcefully override the changes into the remote repository.
+
 -git pull
 This command is used to pull all the changes from the remote git repository
 

@@ -3,7 +3,7 @@ cd name - To move into the directory
 dir - To get list of files
 dir /a - To get list of hidden files
 
-git init - To create Git Respository
+git init - To create a new local Git Respository
 git branch name - To create a new branch
 git branch -m name - To rename a branch
 git branch - To get list of branches
@@ -150,3 +150,46 @@ This command shows all the info about the changes in the project including all t
 Undo and Redo:
 There are 2 ways to undo changes -
 1. revert: Creates a new commit which undoes the changes of a certain commit
+- git revert hash
+Ex: git revert bc5d13c027110d8f79df845c17c8378e5e9d681c
+
+- git revert -m 1 hash
+Ex: git revert -m 1 bc5d13c027110d8f79df845c17c8378e5e9d681c
+Choosing the parent (-m option): Depending on your specific situation, you may need to choose -m 1 or -m 2. Generally, -m 1 is used to revert the mainline changes introduced by the merge commit, while -m 2 would revert changes from the branch merged in.
+
+Usually, -m 1 is used if you want to revert the changes introduced by the merge commit itself.
+
+USING git checkout hash???????????
+
+2. git reset - Resets the current branch to show only commits up to the specified one. It disregards all the commits till the specified commit.
+-git reset bc5d13c027110d8f79df845c17c8378e5e9d681c
+
+There are two types of reset - 
+	1. git reset --soft hash
+	- The soft reset disregards subsequent commits but keeps the changes they have introduced.
+	- Removes commits from history but keeps changes.
+	- Here, unmodified changes will remain in the working directory.
+	2. git reset --hard hash
+	- The hard reset simply disregards subsequent commits, including the changes.
+	- Removes commits from history and removes changes.
+	- Unmodified changes in the working directory will be discarded.
+	If no modifier is specified, by default it is soft.
+	(soft, hard - modifiers)
+
+- git diff sourceBranch targetBranch
+This command shows the difference between two branches.
+
+- git tag
+Creates snapshot of the project at a certain time.
+
+- git stash
+Moves the changes of the project into a stash
+
+- git stash popup
+?
+
+- git rebase
+Takes the changes from the original branch and applies them to the current branch before the current changes.
+
+- git clean
+Removes untracked files
