@@ -5,6 +5,7 @@ dir /a - To get list of hidden files
 
 git init - To create a new local Git Respository
 git branch name - To create a new branch
+- Initially, the default branch will be master. Rename it to main. Only after committing anything new branch can be created.
 git branch -m name - To rename a branch
 git branch - To get list of branches
 
