@@ -45,3 +45,6 @@ Clone the repo with the specified name.
 
 - git remote -v
 This command displays the link to the remote repository.
+
+Create a local branch tracking the remote branch:
+- git checkout -b feature1 remotes/origin/feature1
