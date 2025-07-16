@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git & GitHub Notes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2DD4BF',
+            dark: '#1F2937',
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    .notes-content h1 { font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem; }
+    .notes-content h2 { font-size: 1.25rem; font-weight: bold; margin-bottom: 0.75rem; }
+    .notes-content ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
+    .notes-content pre { background: #2D3748; padding: 1rem; border-radius: 0.5rem; font-family: monospace; white-space: pre-wrap; }
+    .notes-content p { margin-bottom: 1rem; }
+    .highlight { background-color: rgba(45, 212, 191, 0.3); }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-dark text-gray-900 dark:text-white min-h-screen flex flex-col">
+  <header class="bg-dark text-white fixed w-full top-0 z-10 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold">Git & GitHub Notes</h1>
+      <div class="flex items-center space-x-4">
+        <button id="theme-toggle" class="p-2 rounded-full bg-primary hover:bg-primary/80 transition">🌙</button>
+        <button id="sidebar-toggle" class="md:hidden p-2 rounded-full bg-primary hover:bg-primary/80 transition">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="flex flex-1 mt-16">
+    <aside id="sidebar" class="hidden md:block w-64 bg-gray-200 dark:bg-gray-800 p-4 fixed md:static h-full mt-16 md:mt-0 transition-all">
+      <h2 class="text-lg font-semibold mb-4">Sections</h2>
+      <ul id="sidebar-links"></ul>
+    </aside>
+
+    <main class="flex-1 p-4 md:p-8 max-w-5xl mx-auto">
+      <div id="error-message" class="hidden bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 p-4 rounded-lg mb-6"></div>
+
+      <div class="flex space-x-4 mb-6 border-b border-gray-300 dark:border-gray-600">
+        <button id="tab-git" class="pb-2 px-4 text-lg font-medium border-b-2 border-primary text-primary">Git Notes</button>
+        <button id="tab-github" class="pb-2 px-4 text-lg font-medium text-gray-500 hover:text-primary">GitHub Notes</button>
+        <button id="tab-files" class="pb-2 px-4 text-lg font-medium text-gray-500 hover:text-primary">Other Files</button>
+      </div>
+
+      <input
+        id="search-input"
+        type="text"
+        placeholder="Search notes..."
+        class="w-full p-2 mb-6 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+
+      <div id="content" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow notes-content"></div>
+    </main>
+  </div>
+
+  <footer class="bg-dark text-white py-4 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <p>Compiled from Udemy courses. View source on <a href="https://github.com/NagaVaraPrasad18/Git-Notes" class="text-primary hover:underline">GitHub</a>.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Configuration
+    const repo = 'NagaVaraPrasad18/Git-Notes';
+    const otherFileNames = ['First.txt', 'Second.txt', 'Third.txt', 'Fourth.txt'];
+    let gitNotes = 'Loading Git notes...';
+    let githubNotes = 'Loading GitHub notes...';
+    let otherFiles = {};
+    let activeTab = 'git';
+
+    // DOM Elements
+    const contentDiv = document.getElementById('content');
+    const errorDiv = document.getElementById('error-message');
+    const sidebarLinks = document.getElementById('sidebar-links');
+    const themeToggle = document.getElementById('theme-toggle');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const tabGit = document.getElementById('tab-git');
+    const tabGithub = document.getElementById('tab-github');
+    const tabFiles = document.getElementById('tab-files');
+    const searchInput = document.getElementById('search-input');
+    const sidebar = document.getElementById('sidebar');
+
+    // Fetch file content from GitHub
+    async function fetchFileContent(path) {
+      try {
+        const response = await fetch(
+          `https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}`,
+          { headers: { 'Accept': 'application/vnd.github.v3.raw' } }
+        );
+        if (!response.ok) throw new Error(`Failed to fetch ${path}: ${response.statusText}`);
+        return await response.text();
+      } catch (err) {
+        showError(`Error fetching ${path}: ${err.message}`);
+        return `Error: Could not load ${path}. Please check the repository and file path.`;
+      }
+    }
+
+    // Show error message
+    function showError(message) {
+      errorDiv.textContent = message;
+      errorDiv.classList.remove('hidden');
+    }
+
+    // Simple markdown rendering
+    function renderMarkdown(text, searchTerm = '') {
+      let lines = text.split('\n');
+      let html = '';
+      lines.forEach(line => {
+        let formatted = line;
+        if (searchTerm) {
+          const regex = new RegExp(searchTerm, 'gi');
+          formatted = line.replace(regex, match => `<span class="highlight">${match}</span>`);
+        }
+        if (line.startsWith('# ')) {
+          html += `<h1 id="${line.slice(2).toLowerCase().replace(/\s/g, '-')}">${formatted.slice(2)}</h1>`;
+        } else if (line.startsWith('## ')) {
+          html += `<h2 id="${line.slice(3).toLowerCase().replace(/\s/g, '-')}">${formatted.slice(3)}</h2>`;
+        } else if (line.startsWith('- ')) {
+          html += `<ul><li>${formatted.slice(2)}</li></ul>`;
+        } else if (line.startsWith('```')) {
+          html += line === '```' ? '</pre>' : '<pre>';
+        } else {
+          html += `<p>${formatted}</p>`;
+        }
+      });
+      return html;
+    }
+
+    // Update sidebar with headings
+    function updateSidebar(content) {
+      sidebarLinks.innerHTML = '';
+      const lines = content.split('\n');
+      const headings = lines.filter(line => line.startsWith('#')).map(line => ({
+        text: line.replace(/^#+/, '').trim(),
+        level: line.match(/^#+/)?.[0].length || 1,
+      }));
+      headings.forEach(heading => {
+        const li = document.createElement('li');
+        li.className = `ml-${(heading.level - 1) * 2} mb-2`;
+        li.innerHTML = `<a href="#${heading.text.toLowerCase().replace(/\s/g, '-')}" class="hover:text-primary">${heading.text}</a>`;
+        sidebarLinks.appendChild(li);
+      });
+    }
+
+    // Render content based on active tab
+    function renderContent() {
+      if (activeTab === 'files') {
+        let html = '<div class="grid gap-4">';
+        for (const [fileName, content] of Object.entries(otherFiles)) {
+          let formatted = content;
+          if (searchInput.value) {
+            const regex = new RegExp(searchInput.value, 'gi');
+            formatted = content.replace(regex, match => `<span class="highlight">${match}</span>`);
+          }
+          html += `<div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold">${fileName}</h3>
+                    <p class="mt-2">${formatted}</p>
+                  </div>`;
+        }
+        html += '</div>';
+        contentDiv.innerHTML = html;
+        sidebarLinks.innerHTML = '';
+      } else {
+        const content = activeTab === 'git' ? gitNotes : githubNotes;
+        contentDiv.innerHTML = renderMarkdown(content, searchInput.value);
+        updateSidebar(content);
+      }
+    }
+
+    // Fetch all files
+    async function fetchAllFiles() {
+      gitNotes = await fetchFileContent('Notes.txt');
+      githubNotes = await fetchFileContent('GitHub Notes.txt');
+      for (const file of otherFileNames) {
+        otherFiles[file] = await fetchFileContent(file);
+      }
+      renderContent();
+    }
+
+    // Initialize
+    fetchAllFiles();
+
+    // Tab switching
+    tabGit.addEventListener('click', () => {
+      activeTab = 'git';
+      tabGit.classList.add('border-b-2', 'border-primary', 'text-primary');
+      tabGithub.classList.remove('border-b-2', 'border-primary', 'text-primary');
+      tabFiles.classList.remove('border-b-2', 'border-primary', 'text-primary');
+      tabGithub.classList.add('text-gray-500', 'hover:text-primary');
+      tabFiles.classList.add('text-gray-500', 'hover:text-primary');
+      renderContent();
+    });
+
+    tabGithub.addEventListener('click', () => {
+      activeTab = 'github';
+      tabGithub.classList.add('border-b-2', 'border-primary', 'text-primary');
+      tabGit.classList.remove('border-b-2', 'border-primary', 'text-primary');
+      tabFiles.classList.remove('border-b-2', 'border-primary', 'text-primary');
+      tabGit.classList.add('text-gray-500', 'hover:text-primary');
+      tabFiles.classList.add('text-gray-500', 'hover:text-primary');
+      renderContent();
+    });
+
+    tabFiles.addEventListener('click', () => {
+      activeTab = 'files';
+      tabFiles.classList.add('border-b-2', 'border-primary', 'text-primary');
+      tabGit.classList.remove('border-b-2', 'border-primary', 'text-primary');
+      tabGithub.classList.remove('border-b-2', 'border-primary', 'text-primary');
+      tabGit.classList.add('text-gray-500', 'hover:text-primary');
+      tabGithub.classList.add('text-gray-500', 'hover:text-primary');
+      renderContent();
+    });
+
+    // Theme toggle
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      themeToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    });
+
+    // Sidebar toggle
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('hidden');
+    });
+
+    // Search functionality
+    searchInput.addEventListener('input', () => {
+      renderContent();
+    });
+  </script>
+</body>
+</html>
