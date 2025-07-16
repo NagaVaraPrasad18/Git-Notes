@@ -1,225 +1,165 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Git & GitHub Notes</title>
-  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked@4.0.18/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/bash.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#2DD4BF',
-            dark: '#1F2937',
-          },
-        },
-      },
-    };
-  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    pre code.hljs { background: #2D3748; padding: 1rem; border-radius: 0.5rem; }
+    :root {
+      --bg-light: #ffffff;
+      --bg-dark: #1e1e2f;
+      --text-light: #1e1e2f;
+      --text-dark: #f5f5f5;
+      --accent: #4f46e5;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .dark {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: var(--accent);
+      color: white;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .tab {
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      background-color: #e0e7ff;
+      color: #1e1e2f;
+      font-weight: bold;
+    }
+
+    .tab.active {
+      background-color: var(--accent);
+      color: white;
+    }
+
+    .search {
+      text-align: center;
+      margin: 1rem;
+    }
+
+    input[type="text"] {
+      padding: 0.5rem;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+
+    .note-section {
+      max-width: 800px;
+      margin: 1rem auto;
+      background-color: #f4f4f4;
+      border-radius: 10px;
+      padding: 1rem;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+
+    .dark .note-section {
+      background-color: #2b2b3d;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .toggle-darkmode {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: white;
+      cursor: pointer;
+    }
   </style>
 </head>
-<body class="bg-gray-100 dark:bg-dark text-gray-900 dark:text-white min-h-screen flex flex-col">
-  <div id="root"></div>
-  <script type="text/babel">
-    const { useState, useEffect } = React;
+<body>
+  <header>
+    <h1>Git & GitHub Notes</h1>
+    <button class="toggle-darkmode" onclick="toggleDarkMode()">
+      <i class="fas fa-moon"></i>
+    </button>
+  </header>
 
-    const NotesApp = () => {
-      const [activeTab, setActiveTab] = useState('git');
-      const [theme, setTheme] = useState('dark');
-      const [search, setSearch] = useState('');
-      const [sidebarOpen, setSidebarOpen] = useState(false);
-      const [gitNotes, setGitNotes] = useState('Loading Git notes...');
-      const [githubNotes, setGithubNotes] = useState('Loading GitHub notes...');
-      const [otherFiles, setOtherFiles] = useState({});
-      const [error, setError] = useState(null);
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('git')">Git Notes</div>
+    <div class="tab" onclick="switchTab('github')">GitHub Notes</div>
+  </div>
 
-      // Replace with your actual GitHub username and repo name
-      const repo = 'NagaVaraPrasad18/Git-Notes';
-      const otherFileNames = ['First.txt', 'Second.txt', 'Third.txt', 'Fourth.txt'];
+  <div class="search">
+    <input type="text" id="searchInput" placeholder="Search notes..." oninput="filterNotes()" />
+  </div>
 
-      // Fetch file content from GitHub
-      const fetchFileContent = async (path) => {
-        try {
-          const response = await fetch(
-            `https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}`,
-            { headers: { 'Accept': 'application/vnd.github.v3.raw' } }
-          );
-          if (!response.ok) throw new Error(`Failed to fetch ${path}: ${response.statusText}`);
-          return await response.text();
-        } catch (err) {
-          setError(`Error fetching ${path}: ${err.message}`);
-          return `Error: Could not load ${path}. Please check the repository and file path.`;
-        }
-      };
+  <div class="note-section" id="noteSection">
+    Loading...
+  </div>
 
-      // Fetch all files on mount
-      useEffect(() => {
-        const fetchNotes = async () => {
-          const gitContent = await fetchFileContent('Notes.txt');
-          const githubContent = await fetchFileContent('GitHub Notes.txt');
-          setGitNotes(gitContent);
-          setGithubNotes(githubContent);
+  <footer>
+    <p>View Source on <a href="https://github.com/NagaVaraPrasad18/Git-Notes" target="_blank">GitHub</a></p>
+  </footer>
 
-          const otherFilesContent = {};
-          for (const file of otherFileNames) {
-            otherFilesContent[file] = await fetchFileContent(file);
-          }
-          setOtherFiles(otherFilesContent);
-        };
-        fetchNotes();
-
-        // Initialize highlight.js
-        hljs.registerLanguage('bash', window.hljsDefineBash);
-        hljs.highlightAll();
-      }, []);
-
-      useEffect(() => {
-        document.body.classList.toggle('dark', theme === 'dark');
-        hljs.highlightAll();
-      }, [theme, activeTab, gitNotes, githubNotes]);
-
-      const renderNotes = (content) => {
-        let filteredContent = content;
-        if (search) {
-          const regex = new RegExp(search, 'gi');
-          filteredContent = content.replace(regex, (match) => `<mark class="bg-primary/30">${match}</mark>`);
-        }
-        return marked.parse(filteredContent);
-      };
-
-      const getHeadings = (content) => {
-        const lines = content.split('\n');
-        return lines.filter(line => line.startsWith('#')).map(line => ({
-          text: line.replace(/^#+/, '').trim(),
-          level: line.match(/^#+/)?.[0].length || 1,
-        }));
-      };
-
-      return (
-        <div className="flex flex-col min-h-screen">
-          {/* Header */}
-          <header className="bg-dark text-white fixed w-full top-0 z-10 shadow-lg">
-            <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-              <h1 className="text-2xl font-bold">Git & GitHub Notes</h1>
-              <div className="flex items-center space-x-4">
-                <button
-                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                  className="p-2 rounded-full bg-primary hover:bg-primary/80 transition"
-                >
-                  {theme === 'dark' ? '☀️' : '🌙'}
-                </button>
-                <button
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="md:hidden p-2 rounded-full bg-primary hover:bg-primary/80 transition"
-                >
-                  ☰
-                </button>
-              </div>
- простой
-          </header>
-
-          {/* Main Content */}
-          <div className="flex flex-1 mt-16">
-            {/* Sidebar */}
-            <aside className={`${
-              sidebarOpen ? 'block' : 'hidden'
-            } md:block w-64 bg-gray-200 dark:bg-gray-800 p-4 fixed md:static h-full mt-16 md:mt-0 transition-all`}>
-              <h2 className="text-lg font-semibold mb-4">Sections</h2>
-              <ul>
-                {getHeadings(activeTab === 'git' ? gitNotes : githubNotes).map((heading, index) => (
-                  <li key={index} className={`ml-${(heading.level - 1) * 2} mb-2`}>
-                    <a href={`#${heading.text.toLowerCase().replace(/\s/g, '-')}`} className="hover:text-primary">
-                      {heading.text}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </aside>
-
-            {/* Main Notes Area */}
-            <main className="flex-1 p-4 md:p-8 max-w-5xl mx-auto">
-              {/* Error Message */}
-              {error && (
-                <div className="bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 p-4 rounded-lg mb-6">
-                  {error}
-                </div>
-              )}
-
-              {/* Tabs */}
-              <div className="flex space-x-4 mb-6 border-b border-gray-300 dark:border-gray-600">
-                <button poorer
-                  onClick={() => setActiveTab('git')}
-                  className={`pb-2 px-4 text-lg font-medium ${
-                    activeTab === 'git' ? 'border-b-2 border-primary text-primary' : 'text-gray-500 hover:text-primary'
-                  }`}
-                >
-                  Git Notes
-                </button>
-                <button
-                  onClick={() => setActiveTab('github')}
-                  className={`pb-2 px-4 text-lg font-medium ${
-                    activeTab === 'github' ? 'border-b-2 border-primary text-primary' : 'text-gray-500 hover:text-primary'
-                  }`}
-                >
-                  GitHub Notes
-                </button>
-                <button
-                  onClick={() => setActiveTab('files')}
-                  className={`pb-2 px-4 text-lg font-medium ${
-                    activeTab === 'files' ? 'border-b-2 border-primary text-primary' : 'text-gray-500 hover:text-primary'
-                  }`}
-                >
-                  Other Files
-                </button>
-              </div>
-
-              {/* Search Bar */}
-              <input
-                type="text"
-                placeholder="Search notes..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full p-2 mb-6 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-
-              {/* Notes Content */}
-              {activeTab === 'files' ? (
-                <div className="grid gap-4">
-                  {Object.entries(otherFiles).map(([fileName, content]) => (
-                    <div key={fileName} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                      <h3 className="text-lg font-semibold">{fileName}</h3>
-                      <p className="mt-2">{content}</p>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div
-                  className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow prose dark:prose-invert max-w-none"
-                  dangerouslySetInnerHTML={{ __html: renderNotes(activeTab === 'git' ? gitNotes : githubNotes) }}
-                />
-              )}
-            </main>
-          </div>
-
-          {/* Footer */}
-          <footer className="bg-dark text-white py-4 mt-auto">
-            <div className="max-w-7xl mx-auto px-4 text-center">
-              <p>Compiled from Udemy courses. View source on <a href="https://github.com/NagaVaraPrasad18/Git-Notes" className="text-primary hover:underline">GitHub</a>.</p>
-            </div>
-          </footer>
-        </div>
-      );
+  <script>
+    const rawFiles = {
+      git: 'https://raw.githubusercontent.com/NagaVaraPrasad18/Git-Notes/main/Notes.txt',
+      github: 'https://raw.githubusercontent.com/NagaVaraPrasad18/Git-Notes/main/GitHub%20Notes.txt'
     };
 
-    ReactDOM.render(<NotesApp />, document.getElementById('root'));
+    let currentTab = 'git';
+    let allNotes = '';
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+      document.querySelector(`.tab:nth-child(${tab === 'git' ? 1 : 2})`).classList.add('active');
+      loadNotes();
+    }
+
+    async function loadNotes() {
+      const response = await fetch(rawFiles[currentTab]);
+      allNotes = await response.text();
+      document.getElementById('noteSection').textContent = allNotes;
+    }
+
+    function filterNotes() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allNotes
+        .split('\n')
+        .filter(line => line.toLowerCase().includes(query))
+        .join('\n');
+      document.getElementById('noteSection').textContent = filtered || 'No results found.';
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+    }
+
+    // Initial load
+    loadNotes();
   </script>
 </body>
 </html>
