@@ -7,7 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked@4.0.18/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/bash.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -36,8 +36,8 @@
       const [theme, setTheme] = useState('dark');
       const [search, setSearch] = useState('');
       const [sidebarOpen, setSidebarOpen] = useState(false);
-      const [gitNotes, setGitNotes] = useState('Loading...');
-      const [githubNotes, setGithubNotes] = useState('Loading...');
+      const [gitNotes, setGitNotes] = useState('Loading Git notes...');
+      const [githubNotes, setGithubNotes] = useState('Loading GitHub notes...');
       const [otherFiles, setOtherFiles] = useState({});
       const [error, setError] = useState(null);
 
@@ -56,7 +56,7 @@
           return await response.text();
         } catch (err) {
           setError(`Error fetching ${path}: ${err.message}`);
-          return `Error: Could not load ${path}`;
+          return `Error: Could not load ${path}. Please check the repository and file path.`;
         }
       };
 
@@ -75,6 +75,10 @@
           setOtherFiles(otherFilesContent);
         };
         fetchNotes();
+
+        // Initialize highlight.js
+        hljs.registerLanguage('bash', window.hljsDefineBash);
+        hljs.highlightAll();
       }, []);
 
       useEffect(() => {
@@ -119,7 +123,7 @@
                   ☰
                 </button>
               </div>
-            </div>
+ простой
           </header>
 
           {/* Main Content */}
@@ -151,7 +155,7 @@
 
               {/* Tabs */}
               <div className="flex space-x-4 mb-6 border-b border-gray-300 dark:border-gray-600">
-                <button
+                <button poorer
                   onClick={() => setActiveTab('git')}
                   className={`pb-2 px-4 text-lg font-medium ${
                     activeTab === 'git' ? 'border-b-2 border-primary text-primary' : 'text-gray-500 hover:text-primary'
@@ -186,7 +190,7 @@
                 className="w-full p-2 mb-6 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
               />
 
-              /* Notes Content */
+              {/* Notes Content */}
               {activeTab === 'files' ? (
                 <div className="grid gap-4">
                   {Object.entries(otherFiles).map(([fileName, content]) => (
