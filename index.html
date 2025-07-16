@@ -63,8 +63,8 @@
       // Fetch all files on mount
       useEffect(() => {
         const fetchNotes = async () => {
-          const gitContent = await fetchFileContent('Git - Notes.txt');
-          const githubContent = await fetchFileContent('Github - GitHub Notes.txt');
+          const gitContent = await fetchFileContent('Notes.txt');
+          const githubContent = await fetchFileContent('GitHub Notes.txt');
           setGitNotes(gitContent);
           setGithubNotes(githubContent);
 
